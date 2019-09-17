@@ -32,8 +32,10 @@ public class PercolationStats {
 				int col = StdRandom.uniform(n) + 1;
 				perc_model.open(row, col);
 				++sites_cnt;
+				System.out.printf("Opened %d point\n", sites_cnt);
 			}
 			perc_nn[it] = sites_cnt;
+			System.out.printf("Calculated %d experiments\n", it);
 		}
 	}
 	
@@ -79,8 +81,8 @@ public class PercolationStats {
 	// test client (see below)
 	public static void main(String[] args)
 	{
-		int grid_size = Integer.parseInt(args[1]);
-		int trials_cnt = Integer.parseInt(args[2]);
+		int grid_size = Integer.parseInt(args[0]);
+		int trials_cnt = Integer.parseInt(args[1]);
 		
 		PercolationStats perc_stats = new PercolationStats(grid_size, trials_cnt);
 		System.out.printf("mean                    = %.16f\n", perc_stats.mean());
