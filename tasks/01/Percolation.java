@@ -26,8 +26,9 @@ public class Percolation {
 	}
 	
 	// creates n-by-n grid, with all sites initially blocked
-	public Percolation(int n){
+	public Percolation(int n_){
 		
+		n = n_;
 		sites_blocked = new boolean[n * n];
 		roots = new int[n * n];
 		group_sizes = new int[n * n];
@@ -51,14 +52,18 @@ public class Percolation {
 		if(!sites_blocked[idx_i])
 			return;
 		
-		sites_blocked[idx_i] = true;
+		sites_blocked[idx_i] = false;
 		group_sizes[idx_i] = 1;
 		roots[idx_i] = idx_i;
 		for (int i = row - 1; i < row + 2; i+=2)
 		{
+			if(i < 0 || i > n - 1)
+				continue;
 			
 			for (int j = col - 1; j < col + 2; j+=2)
 			{
+				if(j < 0 || j > n - 1)
+					continue;
 				
 				int idx_j = get_idx_by_ij(i, j);
 				
