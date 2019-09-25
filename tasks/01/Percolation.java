@@ -22,7 +22,7 @@ public class Percolation {
 	}
 	
 	private int get_idx_by_ij(int i, int j){
-		return j * n + i;
+		return i * n + j;
 	}
 	
 	// creates n-by-n grid, with all sites initially blocked
@@ -42,12 +42,12 @@ public class Percolation {
 	}
 	
 	// opens the site (row, col) if it is not open already
-	public void open(int row_u, int col_u){
+	public void open(int row_i_1, int col_i_1){
 		
-		int row = row_u - 1;
-		int col = col_u - 1;
+		int row_i = row_i_1 - 1;
+		int col_i = col_i_1 - 1;
 		
-		int idx_i = get_idx_by_ij(row, col);
+		int idx_i = get_idx_by_ij(row_i, col_i);
 		
 		if(!sites_blocked[idx_i])
 			return;
@@ -55,48 +55,48 @@ public class Percolation {
 		sites_blocked[idx_i] = false;
 		group_sizes[idx_i] = 1;
 		roots[idx_i] = idx_i;
-		for (int i = row - 1; i < row + 2; i+=2)
+		int row_j = row_i;
+		int col_j = col_i - 1;
+		for (int adj_i = 0; adj_i < 4; adj_i++)
 		{
-			if(i < 0 || i > n - 1)
+			int delta_row = 1 - (adj_i / 2 + adj_i % 2) % 2 * 2;
+			int delta_col = 1 - 2 * (adj_i / 2);
+			row_j += delta_row;
+			col_j += delta_col;
+			
+			if(row_j < 0 || row_j > n - 1 || col_j < 0 || col_j > n - 1)
 				continue;
 			
-			for (int j = col - 1; j < col + 2; j+=2)
+			int idx_j = get_idx_by_ij(row_j, col_j);
+				
+			if(sites_blocked[idx_j])
+				continue;
+			
+			int root_i = get_root(idx_i);
+			int root_j = get_root(idx_j);
+			
+			if(root_i == root_j)
+				continue;
+			
+			int size_i = group_sizes[root_i];
+			int size_j = group_sizes[root_j];
+			
+			int root_new, root_old;
+			if(size_i > size_j)
 			{
-				if(j < 0 || j > n - 1)
-					continue;
-				
-				int idx_j = get_idx_by_ij(i, j);
-				
-				if(sites_blocked[idx_j])
-					continue;
-				
-				int root_i = get_root(idx_i);
-				int root_j = get_root(idx_j);
-				
-				if(root_i == root_j)
-					continue;
-				
-				int size_i = group_sizes[root_i];
-				int size_j = group_sizes[root_j];
-				
-				int root_new, root_old;
-				if(size_i > size_j)
-				{
-					root_new = root_i;
-					root_old = root_j;
-					roots[idx_j] = root_new;
-				}
-				else
-				{
-					root_new = root_j;
-					root_old = root_i;
-					roots[idx_i] = root_new;
-				}
-				
-				group_sizes[root_new] += group_sizes[root_old];
-				group_sizes[root_old] = 0;
-				
+				root_new = root_i;
+				root_old = root_j;
+				roots[idx_j] = root_new;
 			}
+			else
+			{
+				root_new = root_j;
+				root_old = root_i;
+				roots[idx_i] = root_new;
+			}
+			
+			group_sizes[root_new] += group_sizes[root_old];
+			group_sizes[root_old] = 0;
 		}
 	}
 	
@@ -143,12 +143,15 @@ public class Percolation {
 	public boolean percolates(){
 		
 		int opened_bottom_roots[] = new int[n];
+		for(int ix = 0; ix < n; ix++)
+			opened_bottom_roots[ix] = -1;
 		int opened_bottom_cnt = 0;
 		for(int idx = (n - 1) * n; idx < n * n; idx++){
 			
+			int col = idx - (n - 1) * n;
 			if (!sites_blocked[idx]){
 				
-				opened_bottom_roots[opened_bottom_cnt] = get_root(idx);
+				opened_bottom_roots[col] = get_root(idx);
 				++opened_bottom_cnt;
 			}
 		}
