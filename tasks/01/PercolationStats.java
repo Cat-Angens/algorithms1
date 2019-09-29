@@ -26,16 +26,18 @@ public class PercolationStats {
 			Percolation perc_model = new Percolation(n);
 			
 			int sites_cnt = 0;
+			int opened_cnt = 0;
 			while (!perc_model.percolates()) {
 				
 				int row = StdRandom.uniform(n) + 1;
 				int col = StdRandom.uniform(n) + 1;
 				perc_model.open(row, col);
 				++sites_cnt;
-				System.out.printf("Opened %d points (tried %d times)\n", perc_model.numberOfOpenSites(), sites_cnt);
+				opened_cnt = perc_model.numberOfOpenSites();
+//				System.out.printf("Opened %d points (tried %d times)\n", opened_cnt, sites_cnt);
 			}
-			perc_nn[it] = sites_cnt;
-			System.out.printf("Calculated %d experiments\n", it);
+			perc_nn[it] = opened_cnt;
+			System.out.printf("Calculated %d experiments\n", it + 1);
 		}
 	}
 	
@@ -86,7 +88,7 @@ public class PercolationStats {
 		
 		PercolationStats perc_stats = new PercolationStats(grid_size, trials_cnt);
 		System.out.printf("mean                    = %.16f\n", perc_stats.mean());
-		System.out.printf("stddev                  = %.16f\n", perc_stats.mean());
+		System.out.printf("stddev                  = %.16f\n", perc_stats.stddev());
 		System.out.printf("95%% confidence interval = [%.16f, %.16f]\n", perc_stats.confidenceLo(),
 		                  perc_stats.confidenceHi());
 		

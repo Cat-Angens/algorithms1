@@ -22,7 +22,7 @@ public class Percolation {
 	}
 	
 	private int get_idx_by_ij(int i, int j){
-		return i * n + j;
+		return j * n + i;
 	}
 	
 	// creates n-by-n grid, with all sites initially blocked
@@ -86,13 +86,13 @@ public class Percolation {
 			{
 				root_new = root_i;
 				root_old = root_j;
-				roots[idx_j] = root_new;
+				roots[root_j] = root_new;
 			}
 			else
 			{
 				root_new = root_j;
 				root_old = root_i;
-				roots[idx_i] = root_new;
+				roots[root_i] = root_new;
 			}
 			
 			group_sizes[root_new] += group_sizes[root_old];
@@ -144,14 +144,16 @@ public class Percolation {
 		
 		int opened_bottom_roots[] = new int[n];
 		for(int ix = 0; ix < n; ix++)
+		{
 			opened_bottom_roots[ix] = -1;
+		}
 		int opened_bottom_cnt = 0;
-		for(int idx = (n - 1) * n; idx < n * n; idx++){
+		for(int ix = 0; ix < n; ix++){
 			
-			int col = idx - (n - 1) * n;
+			int idx = get_idx_by_ij(ix, n - 1);
 			if (!sites_blocked[idx]){
 				
-				opened_bottom_roots[col] = get_root(idx);
+				opened_bottom_roots[opened_bottom_cnt] = get_root(idx);
 				++opened_bottom_cnt;
 			}
 		}
@@ -160,18 +162,41 @@ public class Percolation {
 		
 		for(int ix_top = 0; ix_top < n; ix_top++){
 			
-			if(!sites_blocked[ix_top]){
+			int idx_top = get_idx_by_ij(ix_top, 0);
+			if(!sites_blocked[idx_top]){
 				
 				for(int idx_bot_i = 0; idx_bot_i < opened_bottom_cnt; idx_bot_i++){
 					
 					int root_bot = opened_bottom_roots[idx_bot_i];
-					if(get_root(ix_top) == root_bot)
+					if(get_root(idx_top) == root_bot)
 						return true;
 				}
 			}
 		}
 		
 		return false;
+	}
+	
+	public void printf(String filename) {
+		
+		for(int iy = 0; iy < n; iy++)
+		{
+			for(int ix = 0; ix < n; ix++)
+			{
+				System.out.printf("%d ", sites_blocked[get_idx_by_ij(ix, iy)] ? 0 : 1);
+			}
+			System.out.print("\n");
+		}
+		
+		for(int iy = 0; iy < n; iy++)
+		{
+			for(int ix = 0; ix < n; ix++)
+			{
+				System.out.printf("%d ", get_root(get_idx_by_ij(ix, iy)));
+			}
+			System.out.print("\n");
+		}
+		
 	}
 	
 	// test client (optional)
