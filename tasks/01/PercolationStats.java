@@ -20,7 +20,7 @@ public class PercolationStats {
 		if (trials <= 0)
 			throw new IndexOutOfBoundsException("illegal total trials count number");
 		
-		StdRandom.setSeed(74);
+		// StdRandom.setSeed(74);
 		trials_cnt = trials;
 		perc_nn = new int[trials];
 		
@@ -28,14 +28,14 @@ public class PercolationStats {
 			
 			Percolation perc_model = new Percolation(n);
 			
-			int sites_cnt = 0;
+			// int sites_cnt = 0;
 			int opened_cnt = 0;
 			while (!perc_model.percolates()) {
 				
 				int row = StdRandom.uniform(n) + 1;
 				int col = StdRandom.uniform(n) + 1;
 				perc_model.open(row, col);
-				++sites_cnt;
+				// ++sites_cnt;
 				opened_cnt = perc_model.numberOfOpenSites();
 //				System.out.printf("Opened %d points (tried %d times)\n", opened_cnt, sites_cnt);
 			}
