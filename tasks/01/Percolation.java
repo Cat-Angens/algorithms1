@@ -106,6 +106,9 @@ public class Percolation {
 		
 		int idx_i = get_idx_by_ij(col, row);
 		
+		if(sites_blocked[idx_i])
+			return false;
+		
 		for(int ix = 0; ix < n; ix++){
 			
 			int idx_j = get_idx_by_ij(ix, 0);
