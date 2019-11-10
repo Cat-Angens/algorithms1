@@ -26,7 +26,7 @@ public class Percolation {
 	public Percolation(int n_){
 		
 		if (n_ <= 0)
-			throw new IndexOutOfBoundsException("illegal total points count number");
+			throw new IllegalArgumentException ("illegal total points count number");
 		
 		n = n_;
 		sites_blocked = new boolean[n * n];
@@ -44,9 +44,9 @@ public class Percolation {
 	public void open(int row_i_1, int col_i_1){
 		
 		if (row_i_1 <= 0 || row_i_1 > n)
-			throw new IndexOutOfBoundsException("row index i out of bounds");
+			throw new IllegalArgumentException ("row index i out of bounds");
 		if (col_i_1 <= 0 || col_i_1 > n)
-			throw new IndexOutOfBoundsException("col index i out of bounds");
+			throw new IllegalArgumentException ("col index i out of bounds");
 		
 		int row_i = row_i_1 - 1;
 		int col_i = col_i_1 - 1;
@@ -83,9 +83,9 @@ public class Percolation {
 	public boolean isOpen(int row_u, int col_u){
 		
 		if (row_u <= 0 || row_u > n)
-			throw new IndexOutOfBoundsException("row index i out of bounds");
+			throw new IllegalArgumentException ("row index i out of bounds");
 		if (col_u <= 0 || col_u > n)
-			throw new IndexOutOfBoundsException("col index i out of bounds");
+			throw new IllegalArgumentException ("col index i out of bounds");
 		
 		int row = row_u - 1;
 		int col = col_u - 1;
@@ -97,9 +97,9 @@ public class Percolation {
 	public boolean isFull(int row_u, int col_u){
 		
 		if (row_u <= 0 || row_u > n)
-			throw new IndexOutOfBoundsException("row index i out of bounds");
+			throw new IllegalArgumentException ("row index i out of bounds");
 		if (col_u <= 0 || col_u > n)
-			throw new IndexOutOfBoundsException("col index i out of bounds");
+			throw new IllegalArgumentException ("col index i out of bounds");
 		
 		int row = row_u - 1;
 		int col = col_u - 1;

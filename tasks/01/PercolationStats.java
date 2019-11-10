@@ -16,9 +16,9 @@ public class PercolationStats {
 	public PercolationStats(int n, int trials)
 	{
 		if (n <= 0)
-			throw new IndexOutOfBoundsException("illegal total points count number");
+			throw new IllegalArgumentException ("illegal total points count number");
 		if (trials <= 0)
-			throw new IndexOutOfBoundsException("illegal total trials count number");
+			throw new IllegalArgumentException ("illegal total trials count number");
 		
 		// StdRandom.setSeed(74);
 		trials_cnt = trials;
