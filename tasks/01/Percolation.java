@@ -4,21 +4,18 @@
  *  Description:
  **************************************************************************** */
 
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+
 public class Percolation {
 	
 	private int n;
 	private boolean sites_blocked[];
-	private int roots[];
-	private int group_sizes[];
+	private WeightedQuickUnionUF sites;
+	private int opened_bottom_idxs[];
 	
 	private int get_root(int idx){
 		
-		while(idx != roots[idx]){
-			
-			roots[idx] = roots[roots[idx]];
-			idx = roots[idx];
-		}
-		return idx;
+		return sites.find(idx);
 	}
 	
 	private int get_idx_by_ij(int i, int j){
@@ -28,21 +25,28 @@ public class Percolation {
 	// creates n-by-n grid, with all sites initially blocked
 	public Percolation(int n_){
 		
+		if (n_ <= 0)
+			throw new IndexOutOfBoundsException("illegal total points count number");
+		
 		n = n_;
 		sites_blocked = new boolean[n * n];
-		roots = new int[n * n];
-		group_sizes = new int[n * n];
+		sites = new WeightedQuickUnionUF(n);
+		opened_bottom_idxs = new int[n];
 		
 		for(int idx = 0; idx < n*n; idx++){
 			
 			sites_blocked[idx] = true;
-			roots[idx] = idx;
-			group_sizes[idx] = 0;
+			
 		}
 	}
 	
 	// opens the site (row, col) if it is not open already
 	public void open(int row_i_1, int col_i_1){
+		
+		if (row_i_1 <= 0 || row_i_1 > n)
+			throw new IndexOutOfBoundsException("row index i out of bounds");
+		if (col_i_1 <= 0 || col_i_1 > n)
+			throw new IndexOutOfBoundsException("col index i out of bounds");
 		
 		int row_i = row_i_1 - 1;
 		int col_i = col_i_1 - 1;
@@ -53,8 +57,7 @@ public class Percolation {
 			return;
 		
 		sites_blocked[idx_i] = false;
-		group_sizes[idx_i] = 1;
-		roots[idx_i] = idx_i;
+		
 		int row_j = row_i;
 		int col_j = col_i - 1;
 		for (int adj_i = 0; adj_i < 4; adj_i++)
@@ -72,36 +75,17 @@ public class Percolation {
 			if(sites_blocked[idx_j])
 				continue;
 			
-			int root_i = get_root(idx_i);
-			int root_j = get_root(idx_j);
-			
-			if(root_i == root_j)
-				continue;
-			
-			int size_i = group_sizes[root_i];
-			int size_j = group_sizes[root_j];
-			
-			int root_new, root_old;
-			if(size_i > size_j)
-			{
-				root_new = root_i;
-				root_old = root_j;
-				roots[root_j] = root_new;
-			}
-			else
-			{
-				root_new = root_j;
-				root_old = root_i;
-				roots[root_i] = root_new;
-			}
-			
-			group_sizes[root_new] += group_sizes[root_old];
-			group_sizes[root_old] = 0;
+			sites.union(idx_i, idx_j);
 		}
 	}
 	
 	// is the site (row, col) open?
 	public boolean isOpen(int row_u, int col_u){
+		
+		if (row_u <= 0 || row_u > n)
+			throw new IndexOutOfBoundsException("row index i out of bounds");
+		if (col_u <= 0 || col_u > n)
+			throw new IndexOutOfBoundsException("col index i out of bounds");
 		
 		int row = row_u - 1;
 		int col = col_u - 1;
@@ -112,6 +96,11 @@ public class Percolation {
 	// is the site (row, col) full?
 	public boolean isFull(int row_u, int col_u){
 		
+		if (row_u <= 0 || row_u > n)
+			throw new IndexOutOfBoundsException("row index i out of bounds");
+		if (col_u <= 0 || col_u > n)
+			throw new IndexOutOfBoundsException("col index i out of bounds");
+		
 		int row = row_u - 1;
 		int col = col_u - 1;
 		
@@ -119,9 +108,9 @@ public class Percolation {
 		int root_i = get_root(idx_i);
 		for(int ix = 0; ix < n; ix++){
 			
-			if (get_root(ix) == root_i)
+			int idx_j = get_idx_by_ij(ix, 0);
+			if (sites.connected(idx_i, idx_j))
 				return true;
-			
 		}
 		
 		return false;
@@ -142,33 +131,32 @@ public class Percolation {
 	// does the system percolate?
 	public boolean percolates(){
 		
-		int opened_bottom_roots[] = new int[n];
 		for(int ix = 0; ix < n; ix++)
 		{
-			opened_bottom_roots[ix] = -1;
+			opened_bottom_idxs[ix] = -1;
 		}
 		int opened_bottom_cnt = 0;
 		for(int ix = 0; ix < n; ix++){
 			
-			int idx = get_idx_by_ij(ix, n - 1);
-			if (!sites_blocked[idx]){
+			int idx_bot = get_idx_by_ij(ix, n - 1);
+			if (!sites_blocked[idx_bot]){
 				
-				opened_bottom_roots[opened_bottom_cnt] = get_root(idx);
+				opened_bottom_idxs[opened_bottom_cnt] = idx_bot;
 				++opened_bottom_cnt;
 			}
 		}
 		if(opened_bottom_cnt == 0)
 			return false;
 		
-		for(int ix_top = 0; ix_top < n; ix_top++){
+		for(int ix = 0; ix < n; ix++){
 			
-			int idx_top = get_idx_by_ij(ix_top, 0);
+			int idx_top = get_idx_by_ij(ix, 0);
 			if(!sites_blocked[idx_top]){
 				
 				for(int idx_bot_i = 0; idx_bot_i < opened_bottom_cnt; idx_bot_i++){
 					
-					int root_bot = opened_bottom_roots[idx_bot_i];
-					if(get_root(idx_top) == root_bot)
+					int idx_bot = opened_bottom_idxs[idx_bot_i];
+					if(sites.connected(idx_top, idx_bot))
 						return true;
 				}
 			}
@@ -177,7 +165,7 @@ public class Percolation {
 		return false;
 	}
 	
-	public void printf(String filename) {
+	private void printf(String filename) {
 		
 		for(int iy = 0; iy < n; iy++)
 		{
@@ -192,7 +180,8 @@ public class Percolation {
 		{
 			for(int ix = 0; ix < n; ix++)
 			{
-				System.out.printf("%d ", get_root(get_idx_by_ij(ix, iy)));
+				int idx = get_idx_by_ij(ix, iy);
+				System.out.printf("%d ", sites.find(idx));
 			}
 			System.out.print("\n");
 		}

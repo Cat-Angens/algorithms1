@@ -7,8 +7,6 @@
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
-import static java.lang.Math.sqrt;
-
 public class PercolationStats {
 	
 	private int trials_cnt;
@@ -17,6 +15,11 @@ public class PercolationStats {
 	// perform independent trials on an n-by-n grid
 	public PercolationStats(int n, int trials)
 	{
+		if (n <= 0)
+			throw new IndexOutOfBoundsException("illegal total points count number");
+		if (trials <= 0)
+			throw new IndexOutOfBoundsException("illegal total trials count number");
+		
 		StdRandom.setSeed(74);
 		trials_cnt = trials;
 		perc_nn = new int[trials];
@@ -37,47 +40,32 @@ public class PercolationStats {
 //				System.out.printf("Opened %d points (tried %d times)\n", opened_cnt, sites_cnt);
 			}
 			perc_nn[it] = opened_cnt;
-			System.out.printf("Calculated %d experiments\n", it + 1);
+			// System.out.printf("Calculated %d experiments\n", it + 1);
 		}
 	}
 	
 	// sample mean of percolation threshold
 	public double mean()
 	{
-		// double sum_nn = 0.0;
-		// for (int nn : perc_nn)
-		// {
-		// 	sum_nn += nn;
-		// }
-		// return sum_nn / trials_cnt;
 		return StdStats.mean(perc_nn);
 	}
 	
 	// sample standard deviation of percolation threshold
 	public double stddev()
 	{
-		// double mean_nn = mean();
-		// double stddev_nn = 0.0;
-		// for (int nn : perc_nn)
-		// {
-		// 	stddev_nn += (nn - mean_nn) * (nn - mean_nn);  
-		// }
-		// stddev_nn /= trials_cnt;
-		//
-		// return stddev_nn;
 		return StdStats.stddev(perc_nn);
 	}
 	
 	// low endpoint of 95% confidence interval
 	public double confidenceLo()
 	{
-		return mean() - 1.96 * stddev() / sqrt(trials_cnt);
+		return mean() - 1.96 * stddev() /  Math.sqrt(trials_cnt);
 	}
 	
 	// high endpoint of 95% confidence interval
 	public double confidenceHi()
 	{
-		return mean() + 1.96 * stddev() / sqrt(trials_cnt);
+		return mean() + 1.96 * stddev() /  Math.sqrt(trials_cnt);
 	}
 	
 	// test client (see below)
