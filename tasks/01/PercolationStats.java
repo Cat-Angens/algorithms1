@@ -39,7 +39,7 @@ public class PercolationStats {
 				opened_cnt = perc_model.numberOfOpenSites();
 //				System.out.printf("Opened %d points (tried %d times)\n", opened_cnt, sites_cnt);
 			}
-			perc_nn[it] = opened_cnt;
+			perc_nn[it] = opened_cnt / n / n;
 			// System.out.printf("Calculated %d experiments\n", it + 1);
 		}
 	}
