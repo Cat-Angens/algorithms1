@@ -10,7 +10,7 @@ import edu.princeton.cs.algs4.StdStats;
 public class PercolationStats {
 	
 	private int trials_cnt;
-	private int perc_nn[];
+	private double perc_frac_threshold[];
 	
 	// perform independent trials on an n-by-n grid
 	public PercolationStats(int n, int trials)
@@ -22,7 +22,7 @@ public class PercolationStats {
 		
 		// StdRandom.setSeed(74);
 		trials_cnt = trials;
-		perc_nn = new int[trials];
+		perc_frac_threshold = new double[trials];
 		
 		for(int it = 0; it < trials_cnt; ++it){
 			
@@ -39,7 +39,7 @@ public class PercolationStats {
 				opened_cnt = perc_model.numberOfOpenSites();
 //				System.out.printf("Opened %d points (tried %d times)\n", opened_cnt, sites_cnt);
 			}
-			perc_nn[it] = opened_cnt / n / n;
+			perc_frac_threshold[it] = (double) opened_cnt / n / n;
 			// System.out.printf("Calculated %d experiments\n", it + 1);
 		}
 	}
@@ -47,13 +47,13 @@ public class PercolationStats {
 	// sample mean of percolation threshold
 	public double mean()
 	{
-		return StdStats.mean(perc_nn);
+		return StdStats.mean(perc_frac_threshold);
 	}
 	
 	// sample standard deviation of percolation threshold
 	public double stddev()
 	{
-		return StdStats.stddev(perc_nn);
+		return StdStats.stddev(perc_frac_threshold);
 	}
 	
 	// low endpoint of 95% confidence interval
