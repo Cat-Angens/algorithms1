@@ -30,7 +30,7 @@ public class Percolation {
 		
 		n = n_;
 		sites_blocked = new boolean[n * n];
-		sites = new WeightedQuickUnionUF(n);
+		sites = new WeightedQuickUnionUF(n * n);
 		opened_bottom_idxs = new int[n];
 		
 		for(int idx = 0; idx < n*n; idx++){
