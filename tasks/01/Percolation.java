@@ -11,7 +11,7 @@ public class Percolation {
 	private int n;
 	private boolean sites_blocked[];
 	private WeightedQuickUnionUF sites;
-	private int opened_bottom_idxs[];
+	private int opened_bottom_roots[];
 	
 	private int get_root(int idx){
 		
@@ -31,7 +31,7 @@ public class Percolation {
 		n = n_;
 		sites_blocked = new boolean[n * n];
 		sites = new WeightedQuickUnionUF(n * n);
-		opened_bottom_idxs = new int[n];
+		opened_bottom_roots = new int[n];
 		
 		for(int idx = 0; idx < n*n; idx++){
 			
@@ -140,7 +140,7 @@ public class Percolation {
 		
 		for(int ix = 0; ix < n; ix++)
 		{
-			opened_bottom_idxs[ix] = -1;
+			opened_bottom_roots[ix] = -1;
 		}
 		int opened_bottom_cnt = 0;
 		for(int ix = 0; ix < n; ix++){
@@ -148,7 +148,7 @@ public class Percolation {
 			int idx_bot = get_idx_by_ij(ix, n - 1);
 			if (!sites_blocked[idx_bot]){
 				
-				opened_bottom_idxs[opened_bottom_cnt] = idx_bot;
+				opened_bottom_roots[opened_bottom_cnt] = sites.find(idx_bot);
 				++opened_bottom_cnt;
 			}
 		}
@@ -158,12 +158,14 @@ public class Percolation {
 		for(int ix = 0; ix < n; ix++){
 			
 			int idx_top = get_idx_by_ij(ix, 0);
+			
 			if(!sites_blocked[idx_top]){
+				
+				int root_top = sites.find(idx_top);
 				
 				for(int idx_bot_i = 0; idx_bot_i < opened_bottom_cnt; idx_bot_i++){
 					
-					int idx_bot = opened_bottom_idxs[idx_bot_i];
-					if(sites.connected(idx_top, idx_bot))
+					if(root_top == opened_bottom_roots[idx_bot_i])
 						return true;
 				}
 			}
