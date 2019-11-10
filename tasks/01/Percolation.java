@@ -71,7 +71,7 @@ public class Percolation {
 				continue;
 			
 			int idx_j = get_idx_by_ij(col_j, row_j);
-				
+			
 			if(sites_blocked[idx_j])
 				continue;
 			

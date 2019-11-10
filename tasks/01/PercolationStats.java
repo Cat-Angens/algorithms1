@@ -11,6 +11,8 @@ public class PercolationStats {
 	
 	private int trials_cnt;
 	private double perc_frac_threshold[];
+	private double mean_val;
+	private double stddev_val;
 	
 	// perform independent trials on an n-by-n grid
 	public PercolationStats(int n, int trials)
@@ -20,6 +22,8 @@ public class PercolationStats {
 		if (trials <= 0)
 			throw new IllegalArgumentException ("illegal total trials count number");
 		
+		mean_val = -1.;
+		stddev_val = -1.;
 		// StdRandom.setSeed(74);
 		trials_cnt = trials;
 		perc_frac_threshold = new double[trials];
@@ -47,13 +51,19 @@ public class PercolationStats {
 	// sample mean of percolation threshold
 	public double mean()
 	{
-		return StdStats.mean(perc_frac_threshold);
+		if(mean_val < 0.)
+			mean_val = StdStats.mean(perc_frac_threshold);
+		
+		return mean_val;
 	}
 	
 	// sample standard deviation of percolation threshold
 	public double stddev()
 	{
-		return StdStats.stddev(perc_frac_threshold);
+		if(stddev_val < 0.)
+			stddev_val = StdStats.stddev(perc_frac_threshold);
+		
+		return stddev_val;
 	}
 	
 	// low endpoint of 95% confidence interval
