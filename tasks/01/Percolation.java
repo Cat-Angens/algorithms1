@@ -105,10 +105,11 @@ public class Percolation {
 		int col = col_u - 1;
 		
 		int idx_i = get_idx_by_ij(row, col);
-		int root_i = get_root(idx_i);
+		
 		for(int ix = 0; ix < n; ix++){
 			
 			int idx_j = get_idx_by_ij(ix, 0);
+			
 			if (sites.connected(idx_i, idx_j))
 				return true;
 		}
@@ -165,7 +166,7 @@ public class Percolation {
 		return false;
 	}
 	
-	private void printf(String filename) {
+	private void printf() {
 		
 		for(int iy = 0; iy < n; iy++)
 		{
