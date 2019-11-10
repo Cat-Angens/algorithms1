@@ -51,7 +51,7 @@ public class Percolation {
 		int row_i = row_i_1 - 1;
 		int col_i = col_i_1 - 1;
 		
-		int idx_i = get_idx_by_ij(row_i, col_i);
+		int idx_i = get_idx_by_ij(col_i, row_i);
 		
 		if(!sites_blocked[idx_i])
 			return;
@@ -70,7 +70,7 @@ public class Percolation {
 			if(row_j < 0 || row_j > n - 1 || col_j < 0 || col_j > n - 1)
 				continue;
 			
-			int idx_j = get_idx_by_ij(row_j, col_j);
+			int idx_j = get_idx_by_ij(col_j, row_j);
 				
 			if(sites_blocked[idx_j])
 				continue;
@@ -90,7 +90,7 @@ public class Percolation {
 		int row = row_u - 1;
 		int col = col_u - 1;
 		
-		return !sites_blocked[get_idx_by_ij(row, col)];
+		return !sites_blocked[get_idx_by_ij(col, row)];
 	}
 	
 	// is the site (row, col) full?
@@ -104,11 +104,14 @@ public class Percolation {
 		int row = row_u - 1;
 		int col = col_u - 1;
 		
-		int idx_i = get_idx_by_ij(row, col);
+		int idx_i = get_idx_by_ij(col, row);
 		
 		for(int ix = 0; ix < n; ix++){
 			
 			int idx_j = get_idx_by_ij(ix, 0);
+			
+			if(sites_blocked[idx_j])
+				continue;
 			
 			if (sites.connected(idx_i, idx_j))
 				return true;
@@ -191,6 +194,11 @@ public class Percolation {
 	
 	// test client (optional)
 	public static void main(String[] args) {
+		
+		Percolation perc = new Percolation(6);
+		perc.open(1, 6);
+		System.out.printf("isFull(1,6): %d\n", perc.isFull(1, 6) ? 1 : 0);
+		System.out.printf("isOpen(1,6): %d\n", perc.isOpen(1, 6) ? 1 : 0);
 		
 	}
 }
