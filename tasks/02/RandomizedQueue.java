@@ -70,14 +70,15 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
     
     private class RandomizedQueueIterator implements Iterator<Item> {
-        private int iterSize = size;
+        private int[] order = StdRandom.permutation(size);
+        private int currentInd = 0;
         public boolean hasNext() {
-            return iterSize != 0;
+            return currentInd != order.length;
         }
         public Item next() {
-            if (iterSize == 0)
+            if (currentInd == order.length)
                 throw new java.util.NoSuchElementException("No more elements in randomized queue!");
-            int ind = StdRandom.uniform(iterSize);
+            int ind = order[currentInd++];
             return vals[ind];
         }
         public void remove() {
@@ -87,7 +88,35 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
 
     // unit testing (required)
     public static void main(String[] args) {
-        
+        RandomizedQueue<Double> test = new RandomizedQueue<Double>();
+        System.out.printf("is empty: %b\n", test.isEmpty());
+        System.out.printf("Size: %d\n", test.size());
+        test.enqueue(1.);
+        System.out.printf("Value: %f\n", test.dequeue());
+        test.enqueue(2.);
+        test.enqueue(3.);
+        test.enqueue(4.);
+        System.out.printf("Size: %d\n", test.size());
+        System.out.printf("Value: %f\n", test.dequeue());
+        System.out.printf("Size: %d\n", test.size());
+        System.out.printf("Value: %f\n", test.sample());
+        System.out.printf("Size: %d\n", test.size());
+        System.out.printf("Value: %f\n", test.dequeue());
+        System.out.printf("is empty: %b\n", test.isEmpty());
+        System.out.printf("Size: %d\n", test.size());
+        System.out.printf("Value: %f\n", test.dequeue());
+        System.out.printf("is empty: %b\n", test.isEmpty());
+        for (Double elem : test)
+            System.out.printf("Elem: %f\n", elem);
+        test.enqueue(5.);
+        test.enqueue(6.);
+        test.enqueue(7.);
+        test.enqueue(8.);
+        test.enqueue(9.);
+        for (Double elem : test)
+            System.out.printf("Elem: %f\n", elem);
+        for (Double elem : test)
+            System.out.printf("Elem: %f\n", elem);
     }
 
 }
