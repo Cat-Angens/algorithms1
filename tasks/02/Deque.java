@@ -127,13 +127,13 @@ public class Deque<Item> implements Iterable<Item> {
         }
         public Item next() {
             if (current == null)
-                throw new java.util.NoSuchElementException("No more elemnts in deque!");
+                throw new java.util.NoSuchElementException("No more elements in deque!");
             Item item = current.value;
             current   = current.next;
             return item;
         }
         public void remove() {
-            throw new UnsupportedOperationException("remove() is not supproted in this implementation");
+            throw new UnsupportedOperationException("remove() is not supported in this implementation");
         }
     }
 
