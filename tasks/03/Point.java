@@ -127,6 +127,39 @@ public class Point implements Comparable<Point> {
      * Unit tests the Point data type.
      */
     public static void main(String[] args) {
-        /* YOUR CODE HERE */
+        Point p1 = new Point(0, 0);
+        Point p2 = new Point(0, 0);
+        Point p3 = new Point(1, 0);
+        Point p4 = new Point(3, 0);
+        Point p5 = new Point(3, -1);
+        Point p6 = new Point(3, 1);
+        Point p7 = new Point(0, 3);
+        Point p8 = new Point(0, 3);
+        Point p9 = new Point(0, -1);
+        Point p10 = new Point(-2, 2);
+        Point p11 = new Point(-2, -2);
+        Point p12 = new Point(2, -2);
+        Point p13 = new Point(-2, 0);
+        
+        System.out.println(p1.compareTo(p2) == 0);
+        System.out.println(p1.compareTo(p3) < 0);
+        System.out.println(p1.compareTo(p5) > 0);
+        System.out.println(p1.compareTo(p6) < 0);
+        System.out.println(p1.compareTo(p13) > 0);
+        
+        System.out.println(p1.slopeTo(p2));
+        System.out.println(p1.slopeTo(p3));
+        System.out.println(p1.slopeTo(p4));
+        System.out.println(p1.slopeTo(p5));
+        System.out.println(p1.slopeTo(p6));
+        System.out.println(p1.slopeTo(p7));
+        System.out.println(p1.slopeTo(p8));
+        System.out.println(p1.slopeTo(p9));
+        System.out.println(p1.slopeTo(p10));
+        System.out.println(p1.slopeTo(p11));
+        System.out.println(p1.slopeTo(p12));
+        System.out.println(p1.slopeTo(p13));
+        
+        System.out.println("end");
     }
 }
