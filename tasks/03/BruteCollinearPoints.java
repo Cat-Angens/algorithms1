@@ -39,6 +39,8 @@ public class BruteCollinearPoints {
                         double slope3 = points[ip].slopeTo(points[is]);
                         if (slope3 == Double.NEGATIVE_INFINITY)
                             throw new IllegalArgumentException("Got repeated Points inside input arrays");
+                        if (points[ir].compareTo(points[is]) == 0)
+                            throw new IllegalArgumentException("Got repeated Points inside input arrays");
                         if (slope1 == slope3) {
                             ++segCnt;
                             int imin = getMin4PointIdx(ip, iq, ir, is);
