@@ -59,6 +59,7 @@ public class Solver {
             SearchNode minNode = priorityQueue.min();
             if (minNode.currBoard.equals(goal))
                 break;
+
             priorityQueue.delMin();
             
             for (Board neighbor : minNode.currBoard.neighbors()) {
@@ -70,8 +71,23 @@ public class Solver {
                 newNode.moves = minNode.moves + 1;
                 priorityQueue.insert(newNode);
             }
-            
-            // TODO stop algorythm in case of unsolvable
+
+            SearchNode minNodeSwapped = priorityQueueSwapped.min();
+            if (minNodeSwapped.currBoard.equals(goal)) {
+                solvable = false;
+                break;
+            }
+            priorityQueueSwapped.delMin();
+
+            for (Board neighbor : minNodeSwapped.currBoard.neighbors()) {
+                if (minNodeSwapped.prevNode != null && neighbor.equals(minNodeSwapped.prevNode.currBoard))
+                    continue;
+                SearchNode newNode = new SearchNode();
+                newNode.currBoard = neighbor;
+                newNode.prevNode = minNodeSwapped;
+                newNode.moves = minNodeSwapped.moves + 1;
+                priorityQueueSwapped.insert(newNode);
+            }
             
         }
     }
@@ -83,7 +99,9 @@ public class Solver {
 
     // min number of moves to solve initial board
     public int moves() {
-        return priorityQueue.min().moves;
+        if (solvable)
+            return priorityQueue.min().moves;
+        return 0;
     }
 
     // sequence of boards in a shortest solution
