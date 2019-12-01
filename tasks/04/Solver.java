@@ -108,6 +108,9 @@ public class Solver {
 
     // sequence of boards in a shortest solution
     public Iterable<Board> solution() {
+        if (!solvable)
+            return null;
+        
         Stack<Board> solutionStack = new Stack<>();
         SearchNode node = priorityQueue.min();
         solutionStack.push(node.currBoard);
