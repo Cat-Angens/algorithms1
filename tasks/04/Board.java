@@ -154,7 +154,7 @@ public class Board {
             neighborsStack.push(new Board(tilesNeigh));
         }
 
-        if (rowZ != n - 1) {
+        if (colZ != n - 1) {
             int [][]tilesNeigh = new int[n][n];
             for (int row = 0; row < n; ++row)
                 for (int col = 0; col < n; ++col)
@@ -175,7 +175,7 @@ public class Board {
             for (int col = 0; col < n; ++col)
                 tilesTwin[row][col] = tiles[row][col];
         int rowSwap = 0;
-        if (tiles[0][0] == 0 || tilesTwin[0][1] == 0)
+        if (tiles[0][0] == 0 || tiles[0][1] == 0)
             ++rowSwap;
         tilesTwin[rowSwap][0] = tiles[rowSwap][1];
         tilesTwin[rowSwap][1] = tiles[rowSwap][0];
