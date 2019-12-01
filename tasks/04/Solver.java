@@ -103,7 +103,7 @@ public class Solver {
     public int moves() {
         if (solvable)
             return priorityQueue.min().moves;
-        return 0;
+        return -1;
     }
 
     // sequence of boards in a shortest solution
