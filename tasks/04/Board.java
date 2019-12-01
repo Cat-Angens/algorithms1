@@ -61,8 +61,8 @@ public class Board {
                 
                 if (tiles[row][col] == 0)
                     continue;
-                int goalRow = tiles[row][col] / n;
-                int goalCol = tiles[row][col] % n;
+                int goalRow = (tiles[row][col] - 1) / n;
+                int goalCol = (tiles[row][col] - 1) % n;
                 
                 dist += Math.abs(row - goalRow);
                 dist += Math.abs(col - goalCol);
