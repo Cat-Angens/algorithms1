@@ -14,7 +14,10 @@ public class Board {
     // where tiles[row][col] = tile at (row, col)
     public Board(int[][] tiles_) {
         n = tiles_.length;
-        tiles = tiles_;
+        tiles = new int[n][n];
+        for (int row = 0; row < n; ++row)
+            for (int col = 0; col < n; ++col)
+                tiles[row][col] = tiles_[row][col];
     }
 
     // string representation of this board
