@@ -28,6 +28,8 @@ public class Solver {
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
         
+        if (initial == null)
+            throw new IllegalArgumentException("Got null as Board object\n");
         n = initial.dimension();
         int [][]tilesGoal = new int[n][n];
         for (int row = 0; row < n; ++row)
