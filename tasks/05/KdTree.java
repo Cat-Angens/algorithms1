@@ -101,17 +101,17 @@ public class KdTree {
                 x = x.right;
             }
         }
-        
-        x = new Node();
-        x.p = p;
-        x.level = level;
-        x.parent = parent;
+
+        Node y = new Node();
+        y.p = p;
+        y.level = level;
+        y.parent = parent;
         if (leftDirect)
-            parent.left = x;
+            parent.left = y;
         else
-            parent.right = x;
+            parent.right = y;
         
-        size++;
+        ++size;
     }
 
     // does the tree contain point p?
