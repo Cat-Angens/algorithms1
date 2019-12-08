@@ -88,7 +88,7 @@ public class PointSET {
         for (Point2D q : point2DSET) {
             
             double r = q.distanceTo(p);
-            if (rmin < r) {
+            if (r < rmin) {
                 
                 rmin = r;
                 pmin = q;
