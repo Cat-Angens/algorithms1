@@ -33,6 +33,12 @@ public class KdTree {
         return level % 2 == 0;
     }
     
+    private boolean pOnRectLevels(Point2D p, RectHV rect, boolean xlevel) {
+        
+        if (xlevel)
+            return !(p.x() < rect.xmin() || p.x() > rect.xmax());
+        return !(p.y() < rect.ymin() || p.y() > rect.ymax());
+    }
     private boolean pLessNode(Node node, Point2D p) {
         
         if (isXLevel(node.level))
@@ -129,14 +135,63 @@ public class KdTree {
         // TODO
     }
 
-    // all points that are inside the rectangle (or on the boundary)
-    public Iterable<Point2D> range(RectHV rect) {
+    private boolean checkNodeInRect(Point2D p, RectHV rect) {
+        if (p.x() < rect.xmin() || p.x() > rect.xmax() ||
+            p.y() < rect.ymin() || p.y() > rect.ymax())
+            return false;
+        return true;
+    }
 
-        // TODO
-        return new Queue<>();
+    private void addChildsOnRectLevel(Node n, Stack<Node> s, RectHV rect) {
+
+        if (n.left == null && n.right == null)
+            return;
+        
+        boolean xort = isXLevel(n.level);
+        double minxy = xort ? rect.xmin() : rect.ymin();
+        double maxxy = xort ? rect.xmax() : rect.ymax();
+        double xy    = xort ? n.p.x()     : n.p.y();
+        
+        if (xy < minxy && n.right != null)
+            s.push(n.right);
+        else if (xy > maxxy && n.left != null)
+            s.push(n.left);
+        else {
+            if (n.left != null)
+                s.push(n.left);
+            if (n.right != null)
+                s.push(n.right);
+        }
     }
     
-    private boolean addChildNodesToStack(Point2D p, Node n, Stack<Node> s) {
+    // all points that are inside the rectangle (or on the boundary)
+    public Iterable<Point2D> range(RectHV rect) {
+        
+        if (size == 0)
+            return null;
+        Queue<Point2D> pqueue = new Queue<Point2D>();
+        if (checkNodeInRect(root.p, rect))
+            pqueue.enqueue(root.p);
+        
+        if (size == 1)
+            return pqueue;
+
+        Stack<Node> nodesToCheck = new Stack<>();
+        addChildsOnRectLevel(root, nodesToCheck, rect);
+        
+        while (!nodesToCheck.isEmpty()) {
+            
+            Node n = nodesToCheck.pop();
+            if (checkNodeInRect(n.p, rect))
+                pqueue.enqueue(n.p);
+            
+            addChildsOnRectLevel(n, nodesToCheck, rect);
+        }
+        
+        return pqueue;
+    }
+    
+    private boolean addChildsInOrderWithPoint(Point2D p, Node n, Stack<Node> s) {
         
         if (n.left == null && n.right == null)
             return false;
@@ -169,7 +224,7 @@ public class KdTree {
         
         Stack<Node> nodesToCheck = new Stack<>();
         
-        addChildNodesToStack(p, root, nodesToCheck);
+        addChildsInOrderWithPoint(p, root, nodesToCheck);
 
         boolean reverseMove = false;
         
@@ -186,7 +241,7 @@ public class KdTree {
                 pmin = x.p;
             }
             
-            reverseMove = !addChildNodesToStack(p, x, nodesToCheck);
+            reverseMove = !addChildsInOrderWithPoint(p, x, nodesToCheck);
             
         }
         return pmin;
@@ -216,17 +271,17 @@ public class KdTree {
         System.out.println("Nearest to p3: " + ptree.nearest(p3));
         System.out.println("Contains #1: " + ptree.contains(new Point2D(0.0, 0.0)));
         System.out.println("Contains #2: " + ptree.contains(new Point2D(0.5, 0.5)));
-        // System.out.print("Range #1: ");
-        // for (Point2D p : ptree.range(new RectHV(0.001, 0.001, 0.002, 0.002)))
-        //     System.out.print(p.toString() + "; ");
-        // System.out.print("\n");
-        // System.out.print("Range #2: ");
-        // for (Point2D p : ptree.range(new RectHV(0.05, 0.05, 0.15, 0.15)))
-        //     System.out.print(p.toString() + "; ");
-        // System.out.print("\n");
-        // System.out.print("Range #3: ");
-        // for (Point2D p : ptree.range(new RectHV(0.25, 0.35, 0.65, 0.75)))
-        //     System.out.print(p.toString() + "; ");
-        // System.out.print("\n");
+        System.out.print("Range #1: ");
+        for (Point2D p : ptree.range(new RectHV(0.001, 0.001, 0.002, 0.002)))
+            System.out.print(p.toString() + "; ");
+        System.out.print("\n");
+        System.out.print("Range #2: ");
+        for (Point2D p : ptree.range(new RectHV(0.05, 0.05, 0.15, 0.15)))
+            System.out.print(p.toString() + "; ");
+        System.out.print("\n");
+        System.out.print("Range #3: ");
+        for (Point2D p : ptree.range(new RectHV(0.25, 0.35, 0.65, 0.75)))
+            System.out.print(p.toString() + "; ");
+        System.out.print("\n");
     }
 }
