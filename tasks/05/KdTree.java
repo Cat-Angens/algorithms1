@@ -67,7 +67,10 @@ public class KdTree {
     
     // add the point to the tree (if it is not already in the tree)
     public void insert(Point2D p) {
-        
+
+        if (p == null)
+            throw new IllegalArgumentException("Got null object in insert()");
+
         if (root == null) {
             root = new Node();
             root.p = p;
@@ -113,6 +116,9 @@ public class KdTree {
 
     // does the tree contain point p?
     public boolean contains(Point2D p) {
+
+        if (p == null)
+            throw new IllegalArgumentException("Got null object in contains()");
 
         if (size == 0)
             return false;
@@ -166,7 +172,10 @@ public class KdTree {
     
     // all points that are inside the rectangle (or on the boundary)
     public Iterable<Point2D> range(RectHV rect) {
-        
+
+        if (rect == null)
+            throw new IllegalArgumentException("Got null object in range()");
+
         if (size == 0)
             return null;
         Queue<Point2D> pqueue = new Queue<Point2D>();
@@ -213,6 +222,9 @@ public class KdTree {
     }
     // a nearest neighbor in the tree to point p; null if the tree is empty
     public Point2D nearest(Point2D p) {
+
+        if (p == null)
+            throw new IllegalArgumentException("Got null object in nearest()");
 
         if (size == 0)
             return null;
