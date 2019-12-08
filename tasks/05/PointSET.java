@@ -11,7 +11,7 @@ import edu.princeton.cs.algs4.SET;
 
 public class PointSET {
 
-    SET<Point2D> point2DSET;
+    private SET<Point2D> point2DSET;
     
     // construct an empty set of points
     public PointSET() {
@@ -99,6 +99,34 @@ public class PointSET {
 
     // unit testing of the methods (optional)
     public static void main(String[] args) {
+        
+        PointSET pset = new PointSET();
+        System.out.println("Empty: " + pset.isEmpty());
+        pset.insert(new Point2D(0.5, 0.5));
+        pset.insert(new Point2D(0.5, 0.5));
+        pset.insert(new Point2D(0.5, 0.6));
+        pset.insert(new Point2D(0.5, 0.7));
+        pset.insert(new Point2D(0.5, 0.8));
+        pset.insert(new Point2D(0.1, 0.5));
+        pset.insert(new Point2D(0.8, 0.5));
+        pset.insert(new Point2D(0.1, 0.1));
+        System.out.println("Empty: " + pset.isEmpty());
+        System.out.println("Size: " + pset.size());
+        System.out.println("Nearest to start: " + pset.nearest(new Point2D(0.0, 0.0)));
+        System.out.println("Contains #1: " + pset.contains(new Point2D(0.0, 0.0)));
+        System.out.println("Contains #2: " + pset.contains(new Point2D(0.5, 0.5)));
+        System.out.print("Range #1: ");
+        for (Point2D p : pset.range(new RectHV(0.001, 0.001, 0.002, 0.002)))
+            System.out.print(p.toString() + "; ");
+        System.out.print("\n");
+        System.out.print("Range #2: ");
+        for (Point2D p : pset.range(new RectHV(0.05, 0.05, 0.15, 0.15)))
+            System.out.print(p.toString() + "; ");
+        System.out.print("\n");
+        System.out.print("Range #3: ");
+        for (Point2D p : pset.range(new RectHV(0.25, 0.35, 0.65, 0.75)))
+            System.out.print(p.toString() + "; ");
+        System.out.print("\n");
         
     } 
     
